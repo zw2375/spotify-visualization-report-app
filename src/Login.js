@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 function Login() {
     const navigate = useNavigate();
     const [loginInfo, setloginInfo] = useState('');
+    const [error, setError] = useState(null);
     const handleSubmit = async (event) => {
     event.preventDefault();
 
@@ -31,11 +32,20 @@ function Login() {
         if (!response.ok) {
             throw new Error('Network response was not ok ' + response.statusText);
         }
-        setloginInfo("Successfully logged in")
-        setTimeout(() => {
-          navigate('/upload');
-        }, 1000)
+        return response.json()
+        
         })
+        .then(data =>{
+          if (data.code != 0) {
+              setError(data.message)
+          }else{
+              setloginInfo("Successfully logged in")
+              setTimeout(() => {
+                navigate('/upload');
+              }, 1000)
+          }
+              
+         })
        
         .catch(error => {
         setloginInfo("Error occoured when logging in:,",error)
@@ -64,6 +74,7 @@ function Login() {
                 
             </fieldset>
             <p>{loginInfo}</p>
+            {error?(<p >{error}</p>):(null)}
         </div>
 
         

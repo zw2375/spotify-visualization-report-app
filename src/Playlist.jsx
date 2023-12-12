@@ -11,6 +11,7 @@ function Playlist() {
   const [seletedGenPlt, setSeletedGenPlt] = useState([]);
   const [streamFlg,setStreamFlg ] = useState(null)
   const [typedArtist,setTypedArtist ] = useState([])
+  const [error, setError] = useState(null);
   const handleButtonClick = () => {
     navigate('/streaming');
     window.scrollTo(0, 0); 
@@ -23,11 +24,17 @@ function Playlist() {
     credentials: 'include'
     })
     .then(response => {
-      console.log(response);
-        if (!response.ok) {
-            throw new Error('Network response was not ok ' + response.statusText);
-        }
+      // console.log(response);
+        return response.json()
+        
+    })
+    .then(data =>{
+      if (data.code != 0) {
+          setError(data.message)
+      }else{
         setStreamFlg(true)
+      }
+          
     })
   
   var margin = {top: 100, right: 200, bottom: 200, left: 200}
@@ -58,25 +65,29 @@ useEffect(() => {
         },
         credentials: 'include'
     });
-        if (!pltResponse.ok) {
+      if (!pltResponse.ok) {
           throw new Error(`HTTP error! Status: ${pltResponse.status}`);
       }
       const pltData = await pltResponse.json();
+      if (pltData.code!=0) {
+        setError(pltData.message)
+      }else{
+        if (pltData && Array.isArray(pltData.data)) {
+          var playlistList = pltData.data.map(item => item.playlistName);
+          setplaylistList(playlistList);
+          var genPltData = pltData.data.map(playlist => [
+          { axis: "Danceability", value: playlist.danceability },
+          { axis: "Energy", value: playlist.energy },
+          { axis: "Loudness", value: (playlist.loudness+60)/60 },
+          { axis: "Liveness", value: playlist.liveness },
+          { axis: "Valence", value: playlist.valence },
+          // Add more attributes as needed
+        ]);
+          setSeletedPltData(genPltData);
+          setSeletedGenPlt(playlistList);
+        }
+      }
       
-      if (pltData && Array.isArray(pltData.data)) {
-      var playlistList = pltData.data.map(item => item.playlistName);
-      setplaylistList(playlistList);
-      var genPltData = pltData.data.map(playlist => [
-      { axis: "Danceability", value: playlist.danceability },
-      { axis: "Energy", value: playlist.energy },
-      { axis: "Loudness", value: (playlist.loudness+60)/60 },
-      { axis: "Liveness", value: playlist.liveness },
-      { axis: "Valence", value: playlist.valence },
-      // Add more attributes as needed
-    ]);
-      setSeletedPltData(genPltData);
-      setSeletedGenPlt(playlistList);
-    }
       const artistResponse = await fetch('http://localhost:8011/api/playlist/get-avg-features-per-artist', {
         method: 'GET',
         headers: {
@@ -87,8 +98,11 @@ useEffect(() => {
       if (!artistResponse.ok) {
           throw new Error(`HTTP error! Status: ${pltResponse.status}`);
       }
+
     const artistData = await artistResponse.json();
-    
+    if (artistData.code!=0) {
+        setError(artistData.message)
+      }else{
     const typedArtist = artistData.data.map((curArtist) =>{
       var emotions = ["pleased","happy","calm","excited","angry","nervous","bored", "sad","sleepy","peaceful","relaxed"]
       var curEmo = determineEmo(curArtist["energy"], curArtist["valence"])
@@ -101,6 +115,7 @@ useEffect(() => {
     })
     console.log(typedArtist);
     setTypedArtist(typedArtist)
+    }
     function determineEmo(energy,valence) {
       var x = valence - 0.5
       var y = energy - 0.5 
@@ -207,7 +222,7 @@ useEffect(() => {
         ):(<div/>)}
         </div>
       ):(<p>Loading data...</p> )}
-      
+      {error?(<p >{error}</p>):(null)}
     
       </DoodleBox>
     

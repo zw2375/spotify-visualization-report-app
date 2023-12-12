@@ -12,100 +12,17 @@ function Streaming(){
     const [sumHours,setSumHours ] = useState(null)
     const [sumMinutes,setSumMinutes ] = useState(null)
     const [countSongs,setCountSongs ] = useState(null)
-    
+    const [error, setError] = useState(null);
     const handleButtonClick = () => {
         navigate('/playlist');
         window.scrollTo(0, 0); // Scroll to the top of the page
     };
 
-    // var day =   {
-    //     Morning: 385774,
-    //     Afternoon: 627424,
-    //     Evening: 522186,
-    //     Night: 468832,
-    // }
-    // var sumHours = Math.round(Object.values(day).reduce((accumulator, currentValue) => accumulator/3600 + currentValue/3600, 0));
-    // var sumMinutes = Math.round(Object.values(day).reduce((accumulator, currentValue) => accumulator/60 + currentValue/60, 0));
-    // var countSongs = 10202;
-    // var weekRaw= [
-    //     {
-    //       "day": 0,
-    //       "secPlayed": 375065
-    //     },
-    //     {
-    //       "day": 1,
-    //       "secPlayed": 286568
-    //     },
-    //     {
-    //       "day": 2,
-    //       "secPlayed": 275071
-    //     },
-    //     {
-    //       "day": 3,
-    //       "secPlayed": 315635
-    //     },
-    //     {
-    //       "day": 4,
-    //       "secPlayed": 213158
-    //     },
-    //     {
-    //       "day": 5,
-    //       "secPlayed": 287459
-    //     },
-    //     {
-    //       "day": 6,
-    //       "secPlayed": 251260
-    //     }
-    // ]
-    // var dayNames = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'];
-   
-   
-    // var week = weekRaw.reduce((acc, dayData) => {
-    //     let dayName = dayNames[dayData.day]; // Get the day name; modulo 7 ensures it loops over the array
-    //     acc[dayName] = dayData.secPlayed;
-    //     return acc;
-    // }, {});
-    
-    // var timeRaw = {
-    //     "0": 68024,
-    //     "1": 85560,
-    //     "2": 101457,
-    //     "3": 95439,
-    //     "4": 84503,
-    //     "5": 33849,
-    //     "6": 38711,
-    //     "7": 53901,
-    //     "8": 55946,
-    //     "9": 53542,
-    //     "10": 85483,
-    //     "11": 98191,
-    //     "12": 96808,
-    //     "13": 120762,
-    //     "14": 144974,
-    //     "15": 113996,
-    //     "16": 80070,
-    //     "17": 70814,
-    //     "18": 43202,
-    //     "19": 59128,
-    //     "20": 80802,
-    //     "21": 116228,
-    //     "22": 133625,
-    //     "23": 89201
-    //   }
-    // var hourLabels = ["12AM", "1AM", "2AM", "3AM", "4AM", "5AM", "6AM", "7AM", "8AM", "9AM", "10AM", "11AM", "12PM", "1PM", "2PM", "3PM", "4PM", "5PM", "6PM", "7PM", "8PM", "9PM", "10PM", "11PM"];
-    // var timeData = Object.keys(timeRaw).map((key, index) => {
-    // return {
-    //     time: hourLabels[index],
-    //     value: timeRaw[key]
-    // };
-    // });
 
     useEffect(() => {
       // Example fetch call to get your data
       const fetchData = async () => {
-          // const clusterResponse = await fetch('path/to/cluster/data');
-          // const clusterData = await clusterResponse.json();
-          // setClusterData(clusterData);
+         
         try{
           const weekResponse = await fetch('http://localhost:8011/api/history/get-sec-played-by-day', {
             method: 'GET',
@@ -118,6 +35,9 @@ function Streaming(){
               throw new Error(`HTTP error! Status: ${weekResponse.status}`);
           }
           const weekRaw = await weekResponse.json();
+          if (weekRaw .code!=0) {
+            setError(weekRaw .message)
+          }else{
           if (Array.isArray(weekRaw.data)) {
             var dayNames = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'];
             var week = weekRaw.data.reduce((acc, dayData) => {
@@ -130,7 +50,7 @@ function Streaming(){
           }else {
             console.error('Received data is not in expected format:', weekRaw);
           }
-
+          }
           const dayResponse = await fetch('http://localhost:8011/api/history/get-sec-played-by-periods', {
             method: 'GET',
             headers: {
@@ -142,12 +62,15 @@ function Streaming(){
               throw new Error(`HTTP error! Status: ${dayResponse.status}`);
           }
           const dayRaw = await dayResponse.json();
-          
+          if (dayRaw.code!=0) {
+            setError(dayRaw.message)
+          }else{
           setDay(dayRaw.data)
           var sumHours = Math.round(Object.values(dayRaw.data).reduce((accumulator, currentValue) => accumulator/3600 + currentValue/3600, 0));
           var sumMinutes = Math.round(Object.values(dayRaw.data).reduce((accumulator, currentValue) => accumulator/60 + currentValue/60, 0));
           setSumHours(sumHours)
           setSumMinutes(sumMinutes)
+          }
           const timeResponse = await fetch('http://localhost:8011/api/history/get-sec-played-by-hours', {
             method: 'GET',
             headers: {
@@ -159,6 +82,9 @@ function Streaming(){
               throw new Error(`HTTP error! Status: ${timeResponse.status}`);
           }
           const timeRaw = await timeResponse.json();
+          if (timeRaw.code!=0) {
+            setError(timeRaw.message)
+          }else{
           var hourLabels = ["12AM", "1AM", "2AM", "3AM", "4AM", "5AM", "6AM", "7AM", "8AM", "9AM", "10AM", "11AM", "12PM", "1PM", "2PM", "3PM", "4PM", "5PM", "6PM", "7PM", "8PM", "9PM", "10PM", "11PM"];
           var timeData = Object.keys(timeRaw.data).map((key, index) => {
           return {
@@ -168,8 +94,7 @@ function Streaming(){
           });
           
           setTimeData(timeData)
-          
-
+          }
           const totalResponse = await fetch('http://localhost:8011/api/history/get-total-listened-songs', {
             method: 'GET',
             headers: {
@@ -181,9 +106,11 @@ function Streaming(){
               throw new Error(`HTTP error! Status: ${totalResponse.status}`);
           }
           const countSongs = await totalResponse.json();
-        
+          if (countSongs.code!=0) {
+            setError(countSongs.message)
+          }else{
           setCountSongs(countSongs.data)
-
+          }
           
       }catch (error) {
         console.error('Fetch error:', error);
@@ -220,6 +147,7 @@ function Streaming(){
             <button type="button"onClick={handleButtonClick}>
             Go to view Playlist & Artist Visualization 
             </button>
+            {error?(<p >{error}</p>):(null)}
     </DoodleBox>
     }  
 export default Streaming;

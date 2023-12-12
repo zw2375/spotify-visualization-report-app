@@ -7,6 +7,7 @@ import {useNavigate } from 'react-router-dom';
 function Register() {
     const navigate = useNavigate();
     const [registerInfo, setRegisterInfo] = useState('');
+    const [error, setError] = useState(null);
     const handleSubmit = async (event) => {
         event.preventDefault();
 
@@ -30,16 +31,24 @@ function Register() {
             credentials: 'include' 
             })
             .then(response => {
+                console.log(response);
             // Check if the response is successful
             if (!response.ok) {
                 throw new Error('Network response was not ok ' + response.statusText);
             }
-            setRegisterInfo('Successfully registered');
-            setTimeout(() => {
-                navigate('/');
-            }, 1000)
+                return response.json()
             })
-           
+           .then(data =>{
+            if (data.code != 0) {
+                setError(data.message)
+            }else{
+                setRegisterInfo('Successfully registered');
+                setTimeout(() => {
+                    navigate('/');
+                }, 1000)
+            }
+                
+           })
             .catch(error => {
             setRegisterInfo('Error occoured when registering: ',error)
             console.error('Error:', error);
@@ -71,6 +80,8 @@ function Register() {
                 
             </fieldset>
             <p >{registerInfo}</p>
+            {error?(<p >{error}</p>):(null)}
+            
         </div>
      
   )
