@@ -66,7 +66,7 @@ function Register() {
                     <input type="password" id="checkPassword" name="checkPassword" className="form-control custom-input-size" placeholder="Password"/>
                     <button type="submit" className="btn btn-outline-success btn-lg">Submit</button>
                     </form>
-                <div className="switchBox">Already have an account?<br></br> <a href="/login">Click to login :D</a></div>
+                <div className="switchBox">Already have an account?<br></br> <a href="/">Click to login :D</a></div>
                 </div>
                 
             </fieldset>
