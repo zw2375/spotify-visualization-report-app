@@ -1,0 +1,167 @@
+@import url('https://fonts.googleapis.com/css2?family=Short+Stack&display=swap');
+body {
+  font-family: 'Short Stack', cursive;
+  font-size: 25px;
+ 
+}
+.doodle-box{
+  width: 80%;
+  margin-left:10%;
+  margin-top:5%;
+}
+#login-box #loginTitle{
+  display: flex;
+  flex-direction: column;
+  margin-left: 3%;
+}
+#login-box #loginTitle legend{
+  margin-top: 18%;
+  font-size: 2em;
+}
+
+#login-box {
+  display: flex; /* Use Flexbox */
+  align-items: center; /* Center items vertically */
+  width: 80%;
+  margin-left: 10%;
+  margin-top: 10%;
+}
+
+
+#login-box .loginContent{
+ width: 60%;
+ margin: 3%;
+
+}
+#login-box .formContent label,
+#login-box .formContent input,
+#login-box .formContent button {
+  margin-bottom: 10px; /* Add margin between form elements */
+}
+
+#swing {
+  border-width: 0;
+  width: 24vw;
+  margin-top: -15%;
+}
+
+#register-box #registerTitle{
+  display: flex;
+  flex-direction: column;
+  margin-left: 3%;
+}
+#register-box #registerTitle legend{
+  margin-top: 10%;
+  font-size: 2em;
+}
+
+#register-box {
+  display: flex; /* Use Flexbox */
+  align-items: center; /* Center items vertically */
+  width: 80%;
+  margin-left: 10%;
+  margin-top: 5%;
+}
+
+#register-box .registerContent{
+ width: 60%;
+ margin: 3%;
+
+}
+#register-box .formContent label,
+#register-box .formContent input,
+#register-box .formContent button {
+  margin-bottom: 10px; /* Add margin between form elements */
+}
+
+#swing2 {
+  border-width: 0;
+  width: 24vw;
+  margin-top: -46%;
+}
+
+.uploadForm {
+  display: flex; /* Use Flexbox */
+  align-items: center; /* Center items vertically */
+  width: 80%;
+  margin-left: 10%;
+}
+#upload-box button{
+  margin-bottom: 5%;
+  margin-left: 10%;
+}
+.uploadPage p, .loginPage p, .registerPage p{
+  margin-left: 10%;
+  color: #1DB954;
+}
+.doodle-box legend{
+  font-size: 2em;
+}
+.genPltOpt{
+  display: flex;
+  justify-content: space-between;
+}
+#pltSub{
+  font-size: 14px;
+  padding: 5px 10px;
+  
+}
+div.tooltip { 
+  position: absolute;     
+  text-align: left;     
+  width: auto;          
+  height: auto;         
+  padding: 2px;       
+  font: 15px 'Short Stack', cursive;  
+  color: white;  
+  background-color: rgba(0,0,0,0.6);
+  padding-bottom: 5px;
+  padding-top: 5px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border: 0px;    
+  border-radius: 8px;     
+  pointer-events: none;     
+}
+.highlight{
+  color: #1DB954;
+}
+#address-box {
+   /* Grey border */
+   /* Margin for spacing */
+/* Rounded corners */
+ 
+   /* Ensures the text fits inside the box */
+}
+
+#address-box .indi-box{
+  padding: 15px; /* Some padding */
+  margin: 15px 0;
+  border: 2px solid #ccc;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Optional: adds a subtle shadow */
+  max-width: 400px; /* Maximum width */
+  word-wrap: break-word;
+}
+#address-box ul {
+  display: flex;
+  flex-wrap: wrap;
+   /* Removes the default list bullet points */
+  padding: 2; /* Removes default padding */
+}
+
+#address-box li {
+  list-style-type: none; 
+  padding-bottom: 10px; /* Spacing between items */
+  border-bottom: 1px solid #eee; /* Border between items */
+}
+
+#address-box li:last-child {
+  border-bottom: none; /* Removes border from the last item */
+}
+button{
+  cursor: pointer;
+}
+.hightlightNum{
+  color:#1DB954;
+  font-size:2em
+}
