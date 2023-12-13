@@ -2,6 +2,8 @@
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
+## Greatings & Intro:
+Hi, welcome to the front-end part of the spotify visualization report application. In this application, everytime after you successfully logged in, you need to upload the general data zip file to see your visualization report for your playlists. Uploading extensive streaming history is optional and you will be able to access the streaming history report after viewing your general infor and playlist visualization reportif you upload it!
 ## Available Scripts
 
 In the project directory, you can run:
