@@ -29,9 +29,7 @@ function Playlist() {
         
     })
     .then(data =>{
-      if (data.code != 0) {
-          setError(data.message)
-      }else{
+      if (data.code == 0) {
         setStreamFlg(true)
       }
           
@@ -230,3 +228,4 @@ useEffect(() => {
   }
 
   export default Playlist;
+ 
